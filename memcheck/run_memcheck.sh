@@ -5,7 +5,7 @@ OUTPUT_FILE="$(date +%Y-%m-%d_%H:%M:%S).memcheck.out"
 
 cd $SOURCE_DIR
 echo "Starting compilation..."
-g++ -o airline_reservation_system Main.cpp
+g++ -g -o airline_reservation_system Main.cpp
 
 cd ../../memcheck
 
