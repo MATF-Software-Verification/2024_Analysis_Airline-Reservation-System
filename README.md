@@ -15,12 +15,37 @@ Projekat je implementiran u programskom jeziku C++ i koristi se putem terminala.
 # Pokretanje projekta:
 
 1. Pre pokretanja projekta potrebno je izmeniti fajlove:
-   > na putanji *Airline-Reservation-System/src/List.h*: ```linija 3: #include"Vector"``` zameniti sa ```#include "Vector.h"```
-3. Prevodjenje aplikacije:
+   * *Airline-Reservation-System/src/List.h:linija 3*:
+    <pre> <b>#include"Vector"</b> zameniti sa <b>#include "Vector.h"</b> </pre>
+   * *Airline-Reservation-System/src/Stack.h*:
+    <pre> na kraj funkcije <i>pop</i> dodati <b>return T();</b> </pre> 
+   * *Airline-Reservation-System/src/Graph.h*:
+    <pre> na kraj funkcija <i>getCost</i> i <i>getCostArrayIndex</i> dodati <b>return -1;</b></pre> 
+2. Prevodjenje aplikacije:
      ```g++ -o airline_reservation_system Main.cpp```
-4. Pokrenuti dobijeni izvršni fajl:
+3. Pokrenuti dobijeni izvršni fajl:
      ```./airline_reservation_system```
      
      
 
 # Primenjeni alati, instalacija i uputstvo za pokretanje:
+Alati korišćeni za analizu koda:
+* <i><b>QtTest</b></i> - za pisanje i izvršavanje jediničnih testova
+* <i><b>Memcheck</b></i> - za pronalaženje grešaka u radu sa memorijom
+* <i><b>Treći</b></i> -
+* <i><b>Clang-format</b></i> - za formatiranje koda
+
+Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direktorijum i pokretanjem skripte. Uputstvo za instalaciju i pokretanje alata na Linux sistemima:
+1. <i><b>QtTest</b></i>:
+     * instalacija: ```sudo apt install qtbase5-dev libqt5test5``` i ```sudo apt install lcov```
+     * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/unit_tests*: ```./run_unit_tests_with_coverage```
+2. <i><b>Memcheck</b></i>:
+     * instalacija: ```sudo apt-get install valgrind```
+     * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/memcheck*: ```./run_memcheck```
+3. <i><b>Clang-format</b></i>:
+     * instalacija: ```sudo apt-get install valgrind```
+     * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/clang*: ```./run_clang_format```
+
+
+
+
