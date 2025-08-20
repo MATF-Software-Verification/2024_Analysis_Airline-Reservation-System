@@ -37,7 +37,7 @@ Alati korišćeni za analizu koda:
 
 Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direktorijum i pokretanjem skripte. Uputstvo za instalaciju i pokretanje alata na Linux sistemima:
 1. <i><b>QtTest</b></i>:
-     * instalacija: ```sudo apt install qtbase5-dev libqt5test5``` i ```sudo apt install lcov```
+     * instalacija: ```sudo apt-get install qtbase5-dev libqt5test5``` i ```sudo apt-get install lcov```
      * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/unit_tests*: ```./run_unit_tests_with_coverage```
 2. <i><b>Memcheck</b></i>:
      * instalacija: ```sudo apt-get install valgrind```
