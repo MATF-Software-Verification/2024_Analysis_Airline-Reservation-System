@@ -52,7 +52,8 @@ Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direkto
      * instalacija: ```sudo apt-get install valgrind```
      * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/clang*: ```./run_clang_format```
 
-Zaključak
+# Zaključak
+
 Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo kompajliranje. Stilski projekat ne prati nijedno pravilo. Takodje, sve funkcije deklarisane su u header fajlovima, pa je jedna od preporuka da se izvrši refaktorisanje fajlova.
 
 
