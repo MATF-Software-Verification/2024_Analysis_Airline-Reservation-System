@@ -54,7 +54,7 @@ Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direkto
 
 # Zaključak
 
-Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo kompajliranje. Stilski projekat ne prati nijedno pravilo. Takođe, sve funkcije su deklarisane u header fajlovima, pa je preporuka da se izvrši refaktorisanje fajlova kako bi se odvojila deklaracija od definicije.
+Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo kompajliranje. Sve ovo ukazuje da je potrebno detaljno pregledati projekat i izvršiti odgovarajuće izmene u cilju poboljšanja njegove stabilnosti i efikasnosti. Ovim radom pokazana je značajnost alata za verifikaciju softvera, čak i kada program naizgled funkcioniše ispravno. Detaljan izveštaj i zaključci mogu se videti u ...
 
 
 
