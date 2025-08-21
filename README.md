@@ -54,7 +54,7 @@ Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direkto
 
 # Zaključak
 
-Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo kompajliranje. Sve ovo ukazuje da je potrebno detaljno pregledati projekat i izvršiti odgovarajuće izmene u cilju poboljšanja njegove stabilnosti i efikasnosti. Ovim radom pokazana je značajnost alata za verifikaciju softvera, čak i kada program naizgled funkcioniše ispravno. Detaljan izveštaj i zaključci mogu se naći na sledećoj **[lokaciji]([https://github.com/SameetAsadullah/Airline-Reservation-System](https://github.com/MATF-Software-Verification/2024_Analysis_Airline-Reservation-System/blob/main/ProjectAnalysisReport.pdf))**
+Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo kompajliranje. Sve ovo ukazuje da je potrebno detaljno pregledati projekat i izvršiti odgovarajuće izmene u cilju poboljšanja njegove stabilnosti i efikasnosti. Ovim radom pokazana je značajnost alata za verifikaciju softvera, čak i kada program naizgled funkcioniše ispravno. Detaljan izveštaj i zaključci mogu se naći na sledećoj **[lokaciji](https://github.com/MATF-Software-Verification/2024_Analysis_Airline-Reservation-System/blob/main/ProjectAnalysisReport.pdf)**.
 
 
 
