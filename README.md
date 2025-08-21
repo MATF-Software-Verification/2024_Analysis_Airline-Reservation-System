@@ -1,22 +1,25 @@
 # 2024_Analysis_Airline-Reservation-System
 
 # Informacije o projektu: 
-Ovaj repozitorijuma sadrži rezultate praktičnog seminarskog rada u okviru kursa *Verifikacija softvera*, na master studijama Matematičkog fakulteta u Beogradu. Izrada projekta obuhvata primenu alata za verifikaciju softvera na odabranom projektu i analizu dobijenih rezultata.
+Ovaj repozitorijum sadrži rezultate praktičnog seminarskog rada u okviru kursa *Verifikacija softvera*, na master studijama Matematičkog fakulteta u Beogradu. Izrada projekta obuhvata primenu alata za verifikaciju softvera na odabranom projektu i analizu dobijenih rezultata.
 
 **Autor: Natalija Filipović 1013/2024**
 
 # Informacije o projektu koji se analizira:
 
-Projekat koji se analizira predstavlja sistem za pronalaženje letova. Sistem pruža mogućnost osnovne pretrage leta na osnovu datuma i kompanije, ali i naprednu pretragu najjeftinijeg let, najkraćeg let, kao i izbor letenja sa ili bez presedanja. 
+Projekat koji se analizira predstavlja sistem za pronalaženje letova. Sistem pruža mogućnost osnovne pretrage leta na osnovu datuma i kompanije, ali i naprednu pretragu najjeftinijeg leta, najkraćeg leta, kao i izbor letenja sa ili bez presedanja. 
 Projekat je implementiran u programskom jeziku C++ i koristi se putem terminala.
 
 **[Ovde](https://github.com/SameetAsadullah/Airline-Reservation-System)** možete pogledati odabrani projekat.
+Analizirana je ```main``` grana i commit hash ```7e41ace```.
 
 # Pokretanje projekta:
 
 1. Pre pokretanja projekta potrebno je izmeniti fajlove:
    * *Airline-Reservation-System/src/List.h:linija 3*:
     <pre> <b>#include"Vector"</b> zameniti sa <b>#include "Vector.h"</b> </pre>
+    
+ Sledeće fajlove promeniti pre pokretanja jediničnih testova, a nakon pokretanja cppcheck-a:
    * *Airline-Reservation-System/src/Stack.h*:
     <pre> na kraj funkcije <i>pop</i> dodati <b>return T();</b> </pre> 
    * *Airline-Reservation-System/src/Graph.h*:
@@ -49,6 +52,8 @@ Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direkto
      * instalacija: ```sudo apt-get install valgrind```
      * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/clang*: ```./run_clang_format```
 
+Zaključak
+Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo kompajliranje. Stilski projekat ne prati nijedno pravilo. Takodje, sve funkcije deklarisane su u header fajlovima, pa je jedna od preporuka da se izvrši refaktorisanje fajlova.
 
 
 
