@@ -31,8 +31,8 @@ Projekat je implementiran u programskom jeziku C++ i koristi se putem terminala.
 # Primenjeni alati, instalacija i uputstvo za pokretanje:
 Alati korišćeni za analizu koda:
 * <i><b>QtTest</b></i> - za pisanje i izvršavanje jediničnih testova
-* <i><b>Memcheck</b></i> - za pronalaženje grešaka u radu sa memorijom
-* <i><b>Treći</b></i> -
+* <i><b>Memcheck</b></i> - za pronalaženje grešaka u radu sa memorijom prilikom izvršavanja programa
+* <i><b>Cppcheck</b></i> - statički analizator za detektovanje potencijalnih grešaka i rizičnih konstrukcija
 * <i><b>Clang-format</b></i> - za formatiranje koda
 
 Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direktorijum i pokretanjem skripte. Uputstvo za instalaciju i pokretanje alata na Linux sistemima:
@@ -42,7 +42,10 @@ Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direkto
 2. <i><b>Memcheck</b></i>:
      * instalacija: ```sudo apt-get install valgrind```
      * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/memcheck*: ```./run_memcheck```
-3. <i><b>Clang-format</b></i>:
+3. <i><b>Cppcheck</b></i>:
+     * instalacija: ```sudo apt-get install cppcheck```
+     * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/cppcheck*: ```./run_cppcheck```
+4. <i><b>Clang-format</b></i>:
      * instalacija: ```sudo apt-get install valgrind```
      * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/clang*: ```./run_clang_format```
 
