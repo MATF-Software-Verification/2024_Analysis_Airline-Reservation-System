@@ -24,7 +24,7 @@ Analizirana je ```main``` grana i commit hash ```7e41ace```.
     <pre> na kraj funkcije <i>pop</i> dodati <b>return T();</b> </pre> 
    * *Airline-Reservation-System/src/Graph.h*:
     <pre> na kraj funkcija <i>getCost</i> i <i>getCostArrayIndex</i> dodati <b>return -1;</b></pre> 
-2. Prevodjenje aplikacije:
+2. Prevođenje aplikacije:
      ```g++ -o airline_reservation_system Main.cpp```
 3. Pokrenuti dobijeni izvršni fajl:
      ```./airline_reservation_system```
@@ -54,7 +54,7 @@ Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direkto
 
 # Zaključak
 
-Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo kompajliranje. Stilski projekat ne prati nijedno pravilo. Takodje, sve funkcije deklarisane su u header fajlovima, pa je jedna od preporuka da se izvrši refaktorisanje fajlova.
+Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo kompajliranje. Stilski projekat ne prati nijedno pravilo. Takođe, sve funkcije su deklarisane u header fajlovima, pa je preporuka da se izvrši refaktorisanje fajlova kako bi se odvojila deklaracija od definicije.
 
 
 
