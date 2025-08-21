@@ -1,0 +1,317 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Cppcheck - HTML report - Airline Reservation System</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+    </style>
+    <script>
+      function getStyle(el, styleProp) {
+        var y;
+
+        if (el.currentStyle) {
+          y = el.currentStyle[styleProp];
+        } else if (window.getComputedStyle) {
+          y = document.defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+        }
+
+        return y;
+      }
+
+      function toggle() {
+        var el = this.expandable_content;
+        var mark = this.expandable_marker;
+
+        if (el.style.display === "block") {
+          el.style.display = "none";
+          mark.textContent = "[+]";
+        } else {
+          el.style.display = "block";
+          mark.textContent = "[-]";
+        }
+      }
+
+      function initExpandables() {
+        var elements = document.querySelectorAll(".expandable");
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+          var el = elements[i];
+          var clickable = el.querySelector("span");
+          var marker = clickable.querySelector(".marker");
+          var content = el.querySelector(".content");
+          var width = clickable.clientWidth - parseInt(getStyle(content, "padding-left")) - parseInt(getStyle(content, "padding-right"));
+          content.style.width = width + "px";
+          clickable.expandable_content = content;
+          clickable.expandable_marker = marker;
+          clickable.addEventListener("click", toggle);
+        }
+      }
+
+      function toggleDisplay(cb) {
+        var elements = document.querySelectorAll("." + cb.id);
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+          elements[i].classList.toggle("id-filtered", !cb.checked);
+        }
+
+        updateFileRows();
+      }
+
+      function toggleSeverity(cb) {
+        cb.parentElement.classList.toggle("unchecked", !cb.checked);
+        var elements = document.querySelectorAll(".sev_" + cb.id);
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+          elements[i].classList.toggle("severity-filtered", !cb.checked);
+        }
+
+        updateFileRows();
+      }
+
+      function toggleTool(cb) {
+        cb.parentElement.classList.toggle("unchecked", !cb.checked);
+
+        var elements;
+        if (cb.id == "clang-tidy")
+            elements = document.querySelectorAll("[class^=clang-tidy-]");
+        else
+            elements = document.querySelectorAll(".issue:not([class^=clang-tidy-])");
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+          elements[i].classList.toggle("tool-filtered", !cb.checked);
+        }
+
+        updateFileRows();
+      }
+
+      function toggleAll() {
+        var elements = document.querySelectorAll(".idToggle");
+
+        // starting from 1 since 0 is the "toggle all" input
+        for (var i = 1, len = elements.length; i < len; i++) {
+          var changed = elements[i].checked != elements[0].checked;
+          if (changed) {
+            elements[i].checked = elements[0].checked;
+            toggleDisplay(elements[i]);
+          }
+        }
+      }
+
+      function filterFile(filter) {
+        var elements = document.querySelectorAll(".fileEntry");
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+          var visible = elements[i].querySelector("tr").querySelector("td").textContent.toLowerCase().includes(filter.toLowerCase());
+          elements[i].classList.toggle("text-filtered", !visible);
+        }
+      }
+
+      function filterText(text) {
+        filter = text.toLowerCase();
+        var elements = document.querySelectorAll(".issue");
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+          var visible = false;
+          var fields = elements[i].querySelectorAll("td");
+          for (var n = 0, num = fields.length; n < num; n++) {
+            if (fields[n].textContent.toLowerCase().includes(filter)) {
+              visible = true;
+              break;
+            }
+          }
+          elements[i].classList.toggle("text-filtered", !visible);
+        }
+
+        updateFileRows();
+      }
+
+      function updateFileRows(element) {
+        var elements = document.querySelectorAll(".fileEntry");
+
+        for (var i = 0, len = elements.length; i < len; i++) {
+          var visible = elements[i].querySelector(".issue:not(.id-filtered):not(.severity-filtered):not(.tool-filtered):not(.text-filtered)");
+          elements[i].classList.toggle("file-filtered", !visible);
+        }
+      }
+
+      window.addEventListener("load", initExpandables);
+    </script>
+  </head>
+  <body>
+    <div id="wrapper">
+    <div id="header" class="header">
+      <h1>Cppcheck report - Airline Reservation System</h1>
+      <div id="filters">
+
+        <label class="checkBtn"><input type="checkbox" onclick="toggleSeverity(this)" id="error"checked/>error</label>
+        <label class="checkBtn"><input type="checkbox" onclick="toggleSeverity(this)" id="warning"checked/>warning</label>
+        <label class="checkBtn disabled"><input type="checkbox" onclick="toggleSeverity(this)" id="portability"disabled/>portability</label>
+        <label class="checkBtn"><input type="checkbox" onclick="toggleSeverity(this)" id="performance"checked/>performance</label>
+        <label class="checkBtn"><input type="checkbox" onclick="toggleSeverity(this)" id="style"checked/>style</label>
+        <label class="checkBtn disabled"><input type="checkbox" onclick="toggleSeverity(this)" id="information"disabled/>information</label>
+        | 
+        <label class="checkBtn"><input type="checkbox" onclick="toggleTool(this)" id="cppcheck"checked/>cppcheck</label>
+        <label class="checkBtn disabled"><input type="checkbox" onclick="toggleTool(this)" id="clang-tidy"disabled/>clang-tidy</label>
+        | 
+        <label class="severityHeader">File: <input type="text" oninput="filterFile(this.value)"/></label>
+        <label class="severityHeader">Filter: <input type="text" oninput="filterText(this.value)"/></label>
+      </div>
+
+    </div>
+
+    <div id="menu_index">
+     <p><a href="index.html">Defect summary</a> </p>
+
+       <label><input type="checkbox" class="idToggle" onclick="toggleAll()" checked> Toggle all</label>
+       <table>
+           <tr><th>Show</th><th>#</th><th>Defect ID</th></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="passedByValue" name="passedByValue" checked></td><td>36</td><td>passedByValue</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="functionConst" name="functionConst" checked></td><td>27</td><td>functionConst</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="functionStatic" name="functionStatic" checked></td><td>8</td><td>functionStatic</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="shadowVariable" name="shadowVariable" checked></td><td>8</td><td>shadowVariable</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="constParameter" name="constParameter" checked></td><td>3</td><td>constParameter</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="uninitMemberVar" name="uninitMemberVar" checked></td><td>3</td><td>uninitMemberVar</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="missingReturn" name="missingReturn" checked></td><td>2</td><td>missingReturn</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="noConstructor" name="noConstructor" checked></td><td>1</td><td>noConstructor</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="operatorEqToSelf" name="operatorEqToSelf" checked></td><td>1</td><td>operatorEqToSelf</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="unreadVariable" name="unreadVariable" checked></td><td>1</td><td>unreadVariable</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="unusedPrivateFunction" name="unusedPrivateFunction" checked></td><td>1</td><td>unusedPrivateFunction</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="unusedVariable" name="unusedVariable" checked></td><td>1</td><td>unusedVariable</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="useInitializationList" name="useInitializationList" checked></td><td>1</td><td>useInitializationList</td></tr>
+            <tr><td><input type="checkbox" class="idToggle" onclick="toggleDisplay(this)" id="variableScope" name="variableScope" checked></td><td>1</td><td>variableScope</td></tr>
+           <tr><td></td><td>94</td><td>total</td></tr>
+       </table>
+       <p><a href="stats.html">Statistics</a></p>
+    </div>
+    <div id="content_index">
+
+       <table class="summaryTable">
+       <tr><th>Line</th><th>Id</th><th>CWE</th><th>Severity</th><th>Message</th></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="2.html">../Airline-Reservation-System/src/DateAndTime.h</a></td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="2.html#line-27">27</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Date::getYear&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="2.html#line-31">31</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Date::getMonth&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="2.html#line-35">35</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Date::getDay&apos; can be const.</td></tr>
+         <tr class="noConstructor sev_style issue"><td><a href="2.html#line-45">45</a></td><td>noConstructor</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>The class &apos;Time&apos; does not declare a constructor although it has private member variables which likely require initialization.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="2.html#line-58">58</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Time::getHours&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="2.html#line-62">62</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Time::getMinutes&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="2.html#line-70">70</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Time::getfloatingTime&apos; can be const.</td></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="3.html">../Airline-Reservation-System/src/Flight.h</a></td></tr>
+         <tr class="uninitMemberVar sev_warning issue"><td><a href="3.html#line-15">15</a></td><td>uninitMemberVar</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>warning</td><td class="warning">Member variable &apos;Flight::FlyingTime&apos; is not initialized in the constructor.</td></tr>
+         <tr class="uninitMemberVar sev_warning issue"><td><a href="3.html#line-15">15</a></td><td>uninitMemberVar</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>warning</td><td class="warning">Member variable &apos;Flight::LandingTime&apos; is not initialized in the constructor.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="3.html#line-18">18</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;airline&apos; should be passed by const reference.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="3.html#line-59">59</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Flight::get_Name_of_Airline&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="3.html#line-64">64</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Flight::getTicketPrice&apos; can be const.</td></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="7.html">../Airline-Reservation-System/src/FlightUI.h</a></td></tr>
+         <tr class="functionStatic sev_performance, inconcl. issue"><td><a href="7.html#line-6">6</a></td><td>functionStatic</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance, inconcl.</td><td class="inconclusive">Technically the member function &apos;FlightUI::displayFlights&apos; can be static (but you may consider moving to unnamed namespace).</td></tr>
+         <tr class="constParameter sev_style issue"><td><a href="7.html#line-6">6</a></td><td>constParameter</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Parameter &apos;src&apos; can be declared with const</td></tr>
+         <tr class="constParameter sev_style issue"><td><a href="7.html#line-6">6</a></td><td>constParameter</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Parameter &apos;desti&apos; can be declared with const</td></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="4.html">../Airline-Reservation-System/src/Graph.h</a></td></tr>
+         <tr class="uninitMemberVar sev_warning issue"><td><a href="4.html#line-23">23</a></td><td>uninitMemberVar</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>warning</td><td class="warning">Member variable &apos;costInfo::time&apos; is not initialized in the constructor.</td></tr>
+         <tr class="unusedPrivateFunction sev_style issue"><td><a href="4.html#line-32">32</a></td><td>unusedPrivateFunction</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Unused private function: &apos;Graph::Display&apos;</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-40">40</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;sour&apos; should be passed by const reference.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="4.html#line-49">49</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Graph::minimum&apos; can be const.</td></tr>
+         <tr class="constParameter sev_style issue"><td><a href="4.html#line-49">49</a></td><td>constParameter</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Parameter &apos;set&apos; can be declared with const</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-64">64</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;src&apos; should be passed by const reference.</td></tr>
+         <tr class="functionStatic sev_performance, inconcl. issue"><td><a href="4.html#line-78">78</a></td><td>functionStatic</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance, inconcl.</td><td class="inconclusive">Technically the member function &apos;Graph::getMinimumFlightRate&apos; can be static (but you may consider moving to unnamed namespace).</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-78">78</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;src&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-78">78</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;desti&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-78">78</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;airline&apos; should be passed by const reference.</td></tr>
+         <tr class="functionStatic sev_performance, inconcl. issue"><td><a href="4.html#line-105">105</a></td><td>functionStatic</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance, inconcl.</td><td class="inconclusive">Technically the member function &apos;Graph::getMinimumFlightTime&apos; can be static (but you may consider moving to unnamed namespace).</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-105">105</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;src&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-105">105</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;desti&apos; should be passed by const reference.</td></tr>
+         <tr class="functionStatic sev_performance, inconcl. issue"><td><a href="4.html#line-127">127</a></td><td>functionStatic</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance, inconcl.</td><td class="inconclusive">Technically the member function &apos;Graph::getMinimumFlightT&apos; can be static (but you may consider moving to unnamed namespace).</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-127">127</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;src&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-127">127</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;desti&apos; should be passed by const reference.</td></tr>
+         <tr class="functionStatic sev_performance, inconcl. issue"><td><a href="4.html#line-153">153</a></td><td>functionStatic</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance, inconcl.</td><td class="inconclusive">Technically the member function &apos;Graph::getMinimumFlight&apos; can be static (but you may consider moving to unnamed namespace).</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-153">153</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;src&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-153">153</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;desti&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-153">153</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;airline&apos; should be passed by const reference.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="4.html#line-180">180</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Graph::getCost&apos; can be const.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-180">180</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;desti&apos; should be passed by const reference.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="4.html#line-188">188</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Graph::getCostArrayIndex&apos; can be const.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-188">188</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;desti&apos; should be passed by const reference.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="4.html#line-197">197</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Graph::displayMinCostPath&apos; can be const.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-197">197</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;src&apos; should be passed by const reference.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="4.html#line-216">216</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Graph::displayMinTimePath&apos; can be const.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-216">216</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;src&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-236">236</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;fileName&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-236">236</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;hotelfile&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-241">241</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;sour&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-241">241</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;dest&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-241">241</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;date&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-241">241</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;airline&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-298">298</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;sour&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-298">298</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;trans&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-298">298</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;dest&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-298">298</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;date&apos; should be passed by const reference.</td></tr>
+         <tr class="shadowVariable sev_style issue"><td><a href="4.html#line-338">338</a></td><td>shadowVariable</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Local variable &apos;k&apos; shadows outer variable</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-376">376</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;sour&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-376">376</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;trans&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-376">376</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;dest&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-376">376</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;date&apos; should be passed by const reference.</td></tr>
+         <tr class="shadowVariable sev_style issue"><td><a href="4.html#line-418">418</a></td><td>shadowVariable</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Local variable &apos;k&apos; shadows outer variable</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-466">466</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;src&apos; should be passed by const reference.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-466">466</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;airline&apos; should be passed by const reference.</td></tr>
+         <tr class="shadowVariable sev_style issue"><td><a href="4.html#line-501">501</a></td><td>shadowVariable</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Local variable &apos;i&apos; shadows outer variable</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-537">537</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;src&apos; should be passed by const reference.</td></tr>
+         <tr class="unreadVariable sev_style issue"><td><a href="4.html#line-541">541</a></td><td>unreadVariable</td><td><a href="https://cwe.mitre.org/data/definitions/563.html">563</a></td><td>style</td><td>Variable &apos;tempDate&apos; is assigned a value that is never used.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="4.html#line-662">662</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;airline&apos; should be passed by const reference.</td></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="0.html">../Airline-Reservation-System/src/List.h</a></td></tr>
+         <tr class="useInitializationList sev_performance issue"><td><a href="0.html#line-27">27</a></td><td>useInitializationList</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Variable &apos;source&apos; is assigned in constructor body. Consider performing initialization in initialization list.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="0.html#line-75">75</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;List::isEmpty&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="0.html#line-102">102</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;List::getCursor&apos; can be const.</td></tr>
+         <tr class="missingReturn sev_error issue"><td><a href="0.html#line-125">125</a></td><td>missingReturn</td><td><a href="https://cwe.mitre.org/data/definitions/758.html">758</a></td><td>error</td><td class="error">Found a exit path from function with non-void return type that has missing return statement</td></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="8.html">../Airline-Reservation-System/src/ListUI.h</a></td></tr>
+         <tr class="functionStatic sev_performance, inconcl. issue"><td><a href="8.html#line-6">6</a></td><td>functionStatic</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance, inconcl.</td><td class="inconclusive">Technically the member function &apos;ListUI::displayList&apos; can be static (but you may consider moving to unnamed namespace).</td></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="1.html">../Airline-Reservation-System/src/Stack.h</a></td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="1.html#line-23">23</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Stack &lt; Flight &gt;::isEmpty&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="1.html#line-23">23</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Stack &lt; string &gt;::isEmpty&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="1.html#line-34">34</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Stack &lt; Flight &gt;::TOP&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="1.html#line-34">34</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Stack &lt; string &gt;::TOP&apos; can be const.</td></tr>
+         <tr class="passedByValue sev_performance issue"><td><a href="1.html#line-38">38</a></td><td>passedByValue</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance</td><td>Function parameter &apos;dataItem&apos; should be passed by const reference.</td></tr>
+         <tr class="missingReturn sev_error issue"><td><a href="1.html#line-52">52</a></td><td>missingReturn</td><td><a href="https://cwe.mitre.org/data/definitions/758.html">758</a></td><td>error</td><td class="error">Found a exit path from function with non-void return type that has missing return statement</td></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="9.html">../Airline-Reservation-System/src/UserInterface.h</a></td></tr>
+         <tr class="functionStatic sev_performance, inconcl. issue"><td><a href="9.html#line-10">10</a></td><td>functionStatic</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance, inconcl.</td><td class="inconclusive">Technically the member function &apos;UI::displayMenu&apos; can be static (but you may consider moving to unnamed namespace).</td></tr>
+         <tr class="unusedVariable sev_style issue"><td><a href="9.html#line-78">78</a></td><td>unusedVariable</td><td><a href="https://cwe.mitre.org/data/definitions/563.html">563</a></td><td>style</td><td>Unused variable: airline</td></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="5.html">../Airline-Reservation-System/src/Vector.h</a></td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="5.html#line-23">23</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Vector &lt; Flight &gt;::Size&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="5.html#line-23">23</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Vector &lt; List &gt;::Size&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="5.html#line-27">27</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Vector &lt; Flight &gt;::Capacity&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="5.html#line-27">27</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Vector &lt; List &gt;::Capacity&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="5.html#line-48">48</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Vector &lt; Flight &gt;::find&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="5.html#line-48">48</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Vector &lt; List &gt;::find&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="5.html#line-57">57</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Vector &lt; Flight &gt;::print&apos; can be const.</td></tr>
+         <tr class="functionConst sev_style, inconcl. issue"><td><a href="5.html#line-57">57</a></td><td>functionConst</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style, inconcl.</td><td class="inconclusive">Technically the member function &apos;Vector &lt; List &gt;::print&apos; can be const.</td></tr>
+         <tr class="operatorEqToSelf sev_warning issue"><td><a href="5.html#line-64">64</a></td><td>operatorEqToSelf</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>warning</td><td class="warning">&apos;operator=&apos; should check for assignment to self to avoid problems with dynamic memory.</td></tr>
+      <tbody class="fileEntry">
+       <tr><td colspan="5"><a href="6.html">../Airline-Reservation-System/src/makeGraph.h</a></td></tr>
+         <tr class="functionStatic sev_performance, inconcl. issue"><td><a href="6.html#line-11">11</a></td><td>functionStatic</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>performance, inconcl.</td><td class="inconclusive">Technically the member function &apos;makeGraph::readFromFile&apos; can be static (but you may consider moving to unnamed namespace).</td></tr>
+         <tr class="variableScope sev_style issue"><td><a href="6.html#line-13">13</a></td><td>variableScope</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>The scope of the variable &apos;hotelRate&apos; can be reduced.</td></tr>
+         <tr class="shadowVariable sev_style issue"><td><a href="6.html#line-56">56</a></td><td>shadowVariable</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Local variable &apos;i&apos; shadows outer variable</td></tr>
+         <tr class="shadowVariable sev_style issue"><td><a href="6.html#line-84">84</a></td><td>shadowVariable</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Local variable &apos;i&apos; shadows outer variable</td></tr>
+         <tr class="shadowVariable sev_style issue"><td><a href="6.html#line-106">106</a></td><td>shadowVariable</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Local variable &apos;i&apos; shadows outer variable</td></tr>
+         <tr class="shadowVariable sev_style issue"><td><a href="6.html#line-129">129</a></td><td>shadowVariable</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Local variable &apos;i&apos; shadows outer variable</td></tr>
+         <tr class="shadowVariable sev_style issue"><td><a href="6.html#line-135">135</a></td><td>shadowVariable</td><td><a href="https://cwe.mitre.org/data/definitions/398.html">398</a></td><td>style</td><td>Local variable &apos;i&apos; shadows outer variable</td></tr>
+      </tbody>
+       </table>
+    </div>
+    <div id="footer" class="footer">
+      <p>
+        Created by Cppcheck 2.7 (<a href="https://cppcheck.sourceforge.io">Sourceforge</a>, <a href="irc://irc.freenode.net/cppcheck">IRC</a>)
+      </p>
+    </div>
+    </div>
+  </body>
+</html>
