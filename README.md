@@ -11,7 +11,7 @@ Projekat koji se analizira predstavlja sistem za pronalaženje letova. Sistem pr
 Projekat je implementiran u programskom jeziku C++ i koristi se putem terminala.
 
 **[Ovde](https://github.com/SameetAsadullah/Airline-Reservation-System)** možete pogledati odabrani projekat.
-Analizirana je ```main``` grana i commit hash ```7e41ace```.
+Analizirana je ```main``` grana zakljucno sa commit-om ```7e41ace```.
 
 # Pokretanje projekta:
 
@@ -49,12 +49,12 @@ Rezultati svakog alata mogu se reprodukovati pozicioniranjem u istoimeni direkto
      * instalacija: ```sudo apt-get install cppcheck```
      * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/cppcheck*: ```./run_cppcheck```
 4. <i><b>Clang-format</b></i>:
-     * instalacija: ```sudo apt-get install valgrind```
+     * instalacija: ```sudo apt-get install clang-format```
      * pokretanje iz direktorijuma *2024_Analysis_Airline-Reservation-System/clang*: ```./run_clang_format```
 
 # Zaključak
 
-Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo kompajliranje. Sve ovo ukazuje da je potrebno detaljno pregledati projekat i izvršiti odgovarajuće izmene u cilju poboljšanja njegove stabilnosti i efikasnosti. Ovim radom pokazana je značajnost alata za verifikaciju softvera, čak i kada program naizgled funkcioniše ispravno. Detaljan izveštaj i zaključci mogu se naći na sledećoj **[lokaciji](https://github.com/MATF-Software-Verification/2024_Analysis_Airline-Reservation-System/blob/main/ProjectAnalysisReport.pdf)**.
+Primenom alata otkrivene su brojne greške i nedopustivi propusti. Nekoliko njih izazvalo je iznenadni prekid izvršavanja, a kod pojedinih alata problem je bio i samo pokretanje. Sve ovo ukazuje da je potrebno detaljno pregledati projekat i izvršiti odgovarajuće izmene u cilju poboljšanja njegove stabilnosti i efikasnosti. Ovim radom pokazana je značajnost alata za verifikaciju softvera, čak i kada program naizgled funkcioniše ispravno. Detaljan izveštaj i zaključci mogu se naći na sledećoj **[lokaciji](https://github.com/MATF-Software-Verification/2024_Analysis_Airline-Reservation-System/blob/main/ProjectAnalysisReport.pdf)**.
 
 
 
