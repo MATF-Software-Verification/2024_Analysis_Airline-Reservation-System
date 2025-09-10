@@ -11,7 +11,7 @@ Projekat koji se analizira predstavlja sistem za pronalaženje letova. Sistem pr
 Projekat je implementiran u programskom jeziku C++ i koristi se putem terminala.
 
 **[Ovde](https://github.com/SameetAsadullah/Airline-Reservation-System)** možete pogledati odabrani projekat.
-Analizirana je ```main``` grana zakljucno sa commit-om ```7e41ace```.
+Analizirana je ```main``` grana zaključno sa commit-om ```7e41ace```.
 
 # Pokretanje projekta:
 
